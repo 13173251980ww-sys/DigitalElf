@@ -9,10 +9,12 @@ app:
 ws:
   host: "0.0.0.0"
   port: 8765
+#语音转文字FunASR配置
 asr:
   model: "iic/SenseVoiceSmall"
   vad_model: "fsmn-vad"
   vad_kwargs:
+    #最大语音段时间，单位毫秒，超过该时间将被切分为多个段进行处理
     max_single_segment_time: 30000
   device: "cuda"
   language: "auto"
@@ -20,4 +22,20 @@ asr:
   batch_size_s: 60
   merge_vad: true
   merge_length_s: 15
+#rag配置
+rag:
+  #分片大小，单位为token，过大可能导致内存不足，过小可能导致上下文不连贯
+  chunk_size: 200
+  #分片重叠大小，单位为token，过大可能导致冗余信息过多，过小可能导致上下文丢失
+  chunk_overlap: 50
+  #embedding模型配置，建议选择支持多语言的模型，以便处理不同语言的文本数据
+  model_name: "BAAI/bge-small-zh-v1.5"
+
+
+
+#大模型配置
+llm:
+  model: "deepseek-chat"
+  temperature: 0.7
+  baseUrl: "https://api.deepseek.com/v1"
 

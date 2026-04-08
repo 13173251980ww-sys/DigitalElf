@@ -2,6 +2,7 @@ from flask import Flask
 from utils.logger import setup_logging
 from api.voice import voiceRoute
 from utils.config import GLOBAL_CONFIG
+from utils.rag import build_vector_store
 import websockets
 import logging
 import asyncio
@@ -61,6 +62,9 @@ def create_app():
 
     # `flask run` 走应用工厂路径，因此在这里启动 WS 线程
     start_ws_background_once()
+
+    #将.txt存入向量数据库
+    build_vector_store()
 
     return app
 

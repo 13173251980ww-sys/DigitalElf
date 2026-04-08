@@ -1,11 +1,9 @@
 from funasr import AutoModel
 from typing import Tuple
-from utils.result import Result
 from utils.config import GLOBAL_CONFIG
 import soundfile as sf
 import numpy as np
 import logging
-import json
 import io
 
 MODEL=None
@@ -63,8 +61,7 @@ async def asrHandle(input_audio_bytes:bytes, ws):
     model = create_funasr_model()
 
     logging.info("开始语音转文字")
-    res = generate_funasr_result(model, waveform)
+    user_text = generate_funasr_result(model, waveform)
 
-    logging.info("语音转文字完成，结果为%s",res)
+    logging.info("语音转文字完成，结果为%s",user_text)
 
-    await ws.send(json.dumps(Result.success("111")))
