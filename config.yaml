@@ -1,0 +1,23 @@
+#Flask应用配置
+app:
+  name: "DigitalElf"
+  version: "1.0.0"
+  debug: true
+  host: "0.0.0.0"
+  port: 5000
+#WebSocket配置
+ws:
+  host: "0.0.0.0"
+  port: 8765
+asr:
+  model: "iic/SenseVoiceSmall"
+  vad_model: "fsmn-vad"
+  vad_kwargs:
+    max_single_segment_time: 30000
+  device: "cuda"
+  language: "auto"
+  use_itn: true
+  batch_size_s: 60
+  merge_vad: true
+  merge_length_s: 15
+
