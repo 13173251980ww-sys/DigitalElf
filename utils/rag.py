@@ -6,6 +6,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from utils.config import GLOBAL_CONFIG
 
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 FAISS_INDEX_PATH=PROJECT_ROOT / "data/faiss_index"
 TEXT_PATH=PROJECT_ROOT/ "data/knowledge.txt"
@@ -100,19 +101,20 @@ def build_rag_prompt(query, retrieved_docs):
     """
     构建RAG提示词
     """
-    # 提取文档内容
     context = "\n\n".join([doc.page_content for doc in retrieved_docs])
+    role = GLOBAL_CONFIG.get("prompt", {}).get("kurisu")
 
-    # 构建提示词
-    prompt =GLOBAL_CONFIG.get("prompt",{}).get("kurisu")+ f"""基于以下已知信息，回答问题。如果无法从已知信息中找到答案，请诚实地说"根据现有知识无法回答该问题"。
-
-            已知信息：
-            {context}
-
-            问题：{query}"""
+    prompt = f"""
+!!要求!!：严格遵循!!重要!!的要求，参考!!资料!!进行回答!!问题!!,不知道就说不知道，不要乱回答。
+*****************************************************************************        
+!!重要!!:{role}
+*****************************************************************************  
+!!问题!!：{query}
+*****************************************************************************  
+!!资料!!：{context}
+"""
 
     logging.info(f"rag检索后的提示词为{prompt}")
-
     return prompt
 
 

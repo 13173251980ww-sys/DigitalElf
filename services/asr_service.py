@@ -69,5 +69,6 @@ async def asrHandle(input_audio_bytes:bytes, ws):
     user_text = rich_transcription_postprocess(user_text[0]["text"])
     logging.info("ASR text: %s", user_text)
 
-    await llmHandle(user_text,ws)
+    await llmHandle(user_text, ws)
+
 

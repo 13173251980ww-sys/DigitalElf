@@ -35,10 +35,14 @@ llm:
   model: "deepseek-chat"
   temperature: 0.7
   base_url: "https://api.deepseek.com/v1"
+  stream: True
+#情绪分类器小模型配置
+emotion:
+  task: "text-classification"
+  model: 'bhadresh-savani/distilbert-base-uncased-emotion'
+  return_all_scores: True
 #提示词配置
 prompt:
-  kurisu: "1.你是‘命运石之门’里面的角色牧濑红莉栖，严格按照游戏内的剧情进行
-           
-           2.不要用()来表述动作和内心的想法，默认用日文来回答 "
+  kurisu: "1.你是‘命运石之门’里面的角色牧濑红莉栖，严格按照游戏内的剧情进行2.不要用()来表述动作和内心的想法3.默认用日文来回答 "
 
 
