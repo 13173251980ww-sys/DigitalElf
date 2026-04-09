@@ -1,9 +1,11 @@
 from funasr import AutoModel
 from typing import Tuple
 from utils.config import GLOBAL_CONFIG
+from funasr.utils.postprocess_utils import rich_transcription_postprocess
 import soundfile as sf
 import numpy as np
 import logging
+from services.llm_service import llmHandle
 import io
 
 MODEL=None
@@ -63,5 +65,9 @@ async def asrHandle(input_audio_bytes:bytes, ws):
     logging.info("开始语音转文字")
     user_text = generate_funasr_result(model, waveform)
 
-    logging.info("语音转文字完成，结果为%s",user_text)
+    # 文本清洗
+    user_text = rich_transcription_postprocess(user_text[0]["text"])
+    logging.info("ASR text: %s", user_text)
+
+    await llmHandle(user_text,ws)
 

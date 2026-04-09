@@ -30,12 +30,15 @@ rag:
   chunk_overlap: 50
   #embedding模型配置，建议选择支持多语言的模型，以便处理不同语言的文本数据
   model_name: "BAAI/bge-small-zh-v1.5"
-
-
-
 #大模型配置
 llm:
   model: "deepseek-chat"
   temperature: 0.7
-  baseUrl: "https://api.deepseek.com/v1"
+  base_url: "https://api.deepseek.com/v1"
+#提示词配置
+prompt:
+  kurisu: "1.你是‘命运石之门’里面的角色牧濑红莉栖，严格按照游戏内的剧情进行
+           
+           2.不要用()来表述动作和内心的想法，默认用日文来回答 "
+
 
