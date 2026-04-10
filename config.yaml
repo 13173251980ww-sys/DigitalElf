@@ -41,6 +41,17 @@ emotion:
   task: "text-classification"
   model: 'bhadresh-savani/distilbert-base-uncased-emotion'
   return_all_scores: True
+#tts配置
+tts:
+  url: "http://127.0.0.1:9880/tts"
+  text_lang: "ja"
+  ref_audio_path: "ref_audio.wav"
+  prompt_text: "どうして私前にあなたと会ったことありますか"
+  prompt_lang: "ja"
+  streaming_mode: true
+  media_type: "wav"
+  timeout: 30
+  chunk_size: 2048
 #提示词配置
 prompt:
   kurisu: "1.你是‘命运石之门’里面的角色牧濑红莉栖，严格按照游戏内的剧情进行2.不要用()来表述动作和内心的想法3.默认用日文来回答 "

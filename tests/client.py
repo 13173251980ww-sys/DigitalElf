@@ -28,8 +28,12 @@ async def send_audio(uri="ws://127.0.0.1:8765", audio_file="test.wav"):
         while True:
             try:
                 response = await asyncio.wait_for(websocket.recv(), timeout=30)
-                payload = json.loads(response)
-                print(f"收到响应: {payload}")
+                if isinstance(response, bytes):
+                    print(f"收到音频数据: {len(response)} bytes")
+                else:
+                    payload = json.loads(response)
+                    print(f"收到响应: {payload}")
+
             except asyncio.TimeoutError:
                 print("等待响应超时，退出")
                 break

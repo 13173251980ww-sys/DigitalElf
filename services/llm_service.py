@@ -6,6 +6,8 @@ from openai import OpenAI
 from utils.result import Result
 from myEnums.ResultTypeEnum import ResultTypeEnum
 from services.emtion_service import emtionHandle
+from services.tts_service import ttsHandle
+import asyncio
 import logging
 import os
 
@@ -49,7 +51,6 @@ def chat_with_llm(client,user_text:str)->Generator[str, None, None]:
             yield chunk.choices[0].delta.content
 
 
-
 async def llmHandle(user_text:str,ws):
     logging.info("进入大模型回复模块")
 
@@ -59,7 +60,14 @@ async def llmHandle(user_text:str,ws):
     #回复流
     reply_stream=chat_with_llm(client,user_text)
 
+    #缓冲队列(给TTS消费)
+    reply_queue=asyncio.Queue()
 
+    #启动tts消费任务
+    asyncio.create_task(ttsHandle(reply_queue,ws))
+
+    #给TTS启动时间
+    await asyncio.sleep(0)
 
     #完整回复文本(给情感分析)
     reply_text=""
@@ -67,10 +75,19 @@ async def llmHandle(user_text:str,ws):
     #流式发送回复
     for chunk in reply_stream:
         reply_text+=chunk
+        await reply_queue.put(chunk) #放入队列供TTS消费
         logging.info(f"大模型回复为{chunk}")
         await ws.send(json.dumps(Result.success(type=ResultTypeEnum.REPLAY.value, data=chunk)))
+        # 每次放入后让出控制权给TTS
+        await asyncio.sleep(0)
 
+    await reply_queue.put(None) #通知TTS消费结束
+
+    #调用情绪处理
     await emtionHandle(reply_text,ws)
+
+    #等待TTS发送完成
+    await reply_queue.join()
 
 
 
