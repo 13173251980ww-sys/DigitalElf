@@ -19,7 +19,7 @@ def create_llm_model():
 
     return CLASSIFIER
 
-async def emtionHandle(reply_text,ws):
+async def emotion_handle(reply_text,ws):
     """
     情绪分类为:joy,sadness,anger,love,fear,anger,surprise.当情绪分析置信度小于0.7时，返回speak
     """

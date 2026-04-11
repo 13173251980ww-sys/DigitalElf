@@ -5,8 +5,8 @@ from utils.rag import load_vector_store,retrieve_relevant_docs,build_rag_prompt
 from openai import OpenAI
 from utils.result import Result
 from myEnums.ResultTypeEnum import ResultTypeEnum
-from services.emtion_service import emtionHandle
-from services.tts_service import ttsHandle
+from services.emtion_service import emotion_handle
+from services.tts_service import tts_handle
 import asyncio
 import logging
 import os
@@ -51,7 +51,7 @@ def chat_with_llm(client,user_text:str)->Generator[str, None, None]:
             yield chunk.choices[0].delta.content
 
 
-async def llmHandle(user_text:str,ws):
+async def llm_handle(user_text:str,ws):
     logging.info("进入大模型回复模块")
 
     logging.info("开始进行大模型模型配置")
@@ -64,7 +64,7 @@ async def llmHandle(user_text:str,ws):
     reply_queue=asyncio.Queue()
 
     #启动tts消费任务
-    asyncio.create_task(ttsHandle(reply_queue,ws))
+    asyncio.create_task(tts_handle(reply_queue,ws))
 
     #给TTS启动时间
     await asyncio.sleep(0)
@@ -84,7 +84,7 @@ async def llmHandle(user_text:str,ws):
     await reply_queue.put(None) #通知TTS消费结束
 
     #调用情绪处理
-    await emtionHandle(reply_text,ws)
+    await emotion_handle(reply_text,ws)
 
     #等待TTS发送完成
     await reply_queue.join()

@@ -5,7 +5,7 @@ from funasr.utils.postprocess_utils import rich_transcription_postprocess
 import soundfile as sf
 import numpy as np
 import logging
-from services.llm_service import llmHandle
+from services.llm_service import llm_handle
 import io
 
 MODEL=None
@@ -53,7 +53,7 @@ def generate_funasr_result(model: AutoModel,waveform):
         merge_length_s=GLOBAL_CONFIG.get("asr",{}).get("merge_length_s")
     )
 
-async def asrHandle(input_audio_bytes:bytes, ws):
+async def asr_handle(input_audio_bytes:bytes, ws):
     logging.info("进入语音转文字处理模块")
 
     waveform,sr=audio_bytes_to_waveform(input_audio_bytes)
@@ -69,6 +69,6 @@ async def asrHandle(input_audio_bytes:bytes, ws):
     user_text = rich_transcription_postprocess(user_text[0]["text"])
     logging.info("ASR text: %s", user_text)
 
-    await llmHandle(user_text, ws)
+    await llm_handle(user_text, ws)
 
 

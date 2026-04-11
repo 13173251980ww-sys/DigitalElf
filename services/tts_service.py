@@ -33,7 +33,7 @@ async def send_tts_audio(text,ws):
     await ws.send(response.content)
 
 
-async def ttsHandle(reply_queue, ws):
+async def tts_handle(reply_queue, ws):
     logging.info("进入TTS模块")
     buffer = ""
     pending_tasks = []

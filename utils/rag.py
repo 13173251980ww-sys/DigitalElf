@@ -13,16 +13,16 @@ TEXT_PATH=PROJECT_ROOT/ "data/knowledge.txt"
 
 MODEL=None
 
-def create_embaddings_model():
+def create_embeddings_model():
     """
-    创建并返回embaddings实例，使用全局变量缓存模型以避免重复加载
+    创建并返回embeddings实例，使用全局变量缓存模型以避免重复加载
     """
     global MODEL
     if MODEL is None:
         MODEL = HuggingFaceEmbeddings(
             model_name=GLOBAL_CONFIG.get("rag", {}).get("model_name")
         )
-        logging.info("embaddings模型下载完成")
+        logging.info("embeddings模型下载完成")
     return MODEL
 
 
@@ -48,22 +48,21 @@ def build_vector_store():
     logging.info("切分完成，得到%d个文本块", len(chunks))
 
     #TODO：改成本地部署
-    embaddings = create_embaddings_model()
+    embeddings = create_embeddings_model()
 
     #存入FAISS
-    vector_store=FAISS.from_documents(chunks,embaddings)
+    vector_store=FAISS.from_documents(chunks,embeddings)
     vector_store.save_local(str(FAISS_INDEX_PATH))
     logging.info("向量索引已保存至 %s 目录",FAISS_INDEX_PATH)
 
     return vector_store
-
 
 def load_vector_store():
     """
     加载已保存的向量数据库
     """
     # 使用相同的embedding模型
-    embeddings = create_embaddings_model()
+    embeddings = create_embeddings_model()
 
     # 加载FAISS索引
     vector_store = FAISS.load_local(

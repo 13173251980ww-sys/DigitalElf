@@ -1,9 +1,6 @@
 import asyncio
 import json
-import logging
-
 import websockets
-import uuid
 from pathlib import Path
 
 

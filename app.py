@@ -1,6 +1,6 @@
 from flask import Flask
 from utils.logger import setup_logging
-from api.voice import voiceRoute
+from api.voice import voice_route
 from utils.config import GLOBAL_CONFIG
 from utils.rag import build_vector_store
 import websockets
@@ -16,7 +16,7 @@ async def start_ws_server():
     启动WebSocket服务器，监听
     """
     server = await websockets.serve(
-        voiceRoute,
+        voice_route,
         GLOBAL_CONFIG.get("ws",{}).get("host"),
         GLOBAL_CONFIG.get("ws",{}).get("port"),
     )
